@@ -191,7 +191,7 @@ MONITOR=ON      # Enable auto-reconnect (ON/OFF)
 
 ## Credits
 
-- Original Wi-Fi script by Kris Henriksen  
+- Original Wifi script by Kris Henriksen  
 - Wifi-Toggle v3.6 and Bluetooth Manager contributions by Jason3x  
 - Enhancements and integration by djparent  
 
