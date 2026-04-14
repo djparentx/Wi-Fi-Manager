@@ -62,6 +62,7 @@ Restores the original console font on exit, kills gptokeyb cleanly, and uses a t
 Configuration
 
 WIFI_LOG=OFF    # Set to ON to enable connection monitor logging
+
 MONITOR=ON      # Set to ON to enable automatic reconnection
 
 
