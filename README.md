@@ -1,7 +1,8 @@
 Wi-Fi Manager for ArkOS / dArkOS
 
 v3.5.2 by djparent Based on Wi-Fi by Kris Henriksen. Additional code from Wifi-Toggle v3.6 and Bluetooth Manager for dArkOS by Jason3x.
-What's New vs. the Original
+What's New vs. the Original:
+
 Multilingual Support
 
 Automatically detects the language set in EmulationStation and displays all menus and messages in English, French, Spanish, Portuguese, Italian, German, or Polish.
