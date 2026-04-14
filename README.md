@@ -1,78 +1,198 @@
-Wi-Fi Manager for ArkOS / dArkOS
+# R36S Wi-Fi Manager (ArkOS / dArkOS)
 
-v3.5.2 by djparent Based on Wi-Fi by Kris Henriksen. Additional code from Wifi-Toggle v3.6 and Bluetooth Manager for dArkOS by Jason3x.
-What's New vs. the Original:
+v3.5.2 by djparent  
+Based on Wi-Fi script by Kris Henriksen, with additional code from Wifi-Toggle v3.6 and Bluetooth Manager for dArkOS by Jason3x.
 
+---
 
-Multilingual Support
+## Overview
 
-Automatically detects the language set in EmulationStation and displays all menus and messages in English, French, Spanish, Portuguese, Italian, German, or Polish.
-USB OTG Wi-Fi Adapter Support
+An advanced Wi-Fi management tool for the R36S that improves reliability, adds automation, and provides a controller-friendly interface with full system integration.
 
-Handles the full lifecycle of USB Wi-Fi adapters — module detection, loading/unloading, USB bus ejection, and re-enumeration via the dwc2 driver. Installs a persistent systemd service (wifi-usb-old-scheme.service) to ensure proper USB enumeration on every boot.
-Wi-Fi State Persistence Across Sleep/Wake
+---
 
-Creates a systemd sleep hook (/etc/systemd/system-sleep/wifi-manager-hook.sh) when Wi-Fi is disabled, so it stays off across suspend/resume cycles. The hook is removed when Wi-Fi is re-enabled.
+## Features
 
+- Multi-language support (EN, FR, ES, PT, IT, DE, PL)
+- Full Wi-Fi control (enable / disable)
+- USB OTG Wi-Fi adapter support with automatic handling
+- Persistent Wi-Fi state across sleep / wake cycles
+- Automatic reconnection monitor (optional)
+- Remote access toggle (SSH, Samba, FileBrowser)
+- Improved connection handling and faster timeouts
+- Automatic dependency detection and installation
+- Clean UI designed for handheld use
+- Safe startup and exit handling
 
-Power Saving Disabled
+---
 
-On first run, creates /etc/NetworkManager/conf.d/wifi-powersave-off.conf to permanently disable NetworkManager's Wi-Fi power saving. This significantly reduces dropped connections.
+## What’s New vs Original
 
-    To revert: sudo rm /etc/NetworkManager/conf.d/wifi-powersave-off.conf
+- Automatic language detection from EmulationStation
+- Full USB Wi-Fi lifecycle management (load, unload, re-enumerate)
+- Persistent systemd service for USB Wi-Fi initialization
+- Sleep hook to preserve Wi-Fi state across suspend/resume
+- Disabled NetworkManager power saving for stability
+- State tracking via `/tmp/wifi_manager_state`
+- Background auto-reconnect system
+- Integrated remote access controls with IP display
+- Faster and more reliable connection attempts
+- Improved input handling with gptokeyb management
+- Clean exit handling with proper system restoration
 
+---
 
-Wi-Fi State File
+## USB Wi-Fi Support
 
-Uses /tmp/wifi_manager_state to track whether Wi-Fi is on or off. This is necessary because physical USB ejection makes hardware detection unreliable as a source of truth.
+Handles USB OTG adapters completely:
 
+- Detects and loads correct kernel modules
+- Safely unloads and ejects USB devices
+- Reinitializes via `dwc2` driver
+- Installs persistent systemd service:
 
-Background Connection Monitor
+  /etc/systemd/system/wifi-usb-old-scheme.service
 
-An optional background process (MONITOR=ON) that watches for disconnections and automatically reconnects within ~15 seconds without user intervention. Logs activity when WIFI_LOG=ON.
+Ensures proper adapter detection on every boot.
 
+---
 
-Remote Access Toggle
+## Wi-Fi State Persistence
 
-Enables/disables Samba (smbd/nmbd), SSH, and FileBrowser as a group. Displays your current IP address when enabled. Remote access is automatically shut down when Wi-Fi is disabled or a network is forgotten.
+- Tracks Wi-Fi state using:
 
+  /tmp/wifi_manager_state
 
-Improved Connection Handling
+- When Wi-Fi is disabled:
+  - Creates sleep hook:
 
-    nmcli connection attempts use -w 10 to time out after 10 seconds instead of hanging for up to 30 seconds on failure
-    On connection failure, NetworkManager is explicitly told to release the phantom connection immediately rather than waiting for it to time out on its own
-    Network scan retries wait 0.5 seconds before the second attempt so the retry
+    /etc/systemd/system-sleep/wifi-manager-hook.sh
 
+  - Keeps Wi-Fi OFF after suspend/resume
 
-Dependency Check
+- Hook is automatically removed when Wi-Fi is re-enabled
 
-Automatically checks for and installs rfkill, wpasupplicant, and network-manager if missing, with clear error messaging if an internet connection isn't available.
+---
 
+## Power Saving Fix
 
-Gamepad Input Management
+Disables NetworkManager Wi-Fi power saving to prevent drops:
 
-Manages gptokeyb lifecycle carefully — kills stale instances before launching, restores it after the on-screen keyboard is used, and keeps it alive across menu loops.
+- Created on first run:
 
+  /etc/NetworkManager/conf.d/wifi-powersave-off.conf
 
-Clean Exit Handling
+- Improves connection stability significantly
 
-Restores the original console font on exit, kills gptokeyb cleanly, and uses a trap to ensure cleanup runs even on unexpected exits.
+To revert:
 
+  sudo rm /etc/NetworkManager/conf.d/wifi-powersave-off.conf
 
-Configuration
+---
 
-WIFI_LOG=OFF    # Set to ON to enable connection monitor logging
+## Background Monitor
 
-MONITOR=ON      # Set to ON to enable automatic reconnection
+Optional automatic reconnection system:
 
+- Enabled with:
 
-Requirements
+  MONITOR=ON
 
-    ArkOS or dArkOS
-    rfkill, wpasupplicant, network-manager (auto-installed if missing)
-   
+- Detects dropped connections
+- Reconnects automatically within ~15 seconds
+- Logging available with:
 
-Credits
+  WIFI_LOG=ON
 
-    Original Wi-Fi script by Kris Henriksen
-    Wifi-Toggle v3.6 and Bluetooth Manager for dArkOS by Jason3x
+---
+
+## Remote Access
+
+Toggle remote services as a group:
+
+- SSH
+- Samba (smbd / nmbd)
+- FileBrowser
+
+Features:
+
+- Displays current IP address when enabled
+- Automatically disables services when:
+  - Wi-Fi is turned off
+  - Network is forgotten
+
+---
+
+## Connection Improvements
+
+- Uses `nmcli -w 10` to prevent long hangs
+- Forces immediate cleanup on failed connections
+- Adds retry delay for more reliable scans
+- Reduces overall connection instability
+
+---
+
+## Dependency Management
+
+Automatically checks and installs:
+
+- rfkill
+- wpasupplicant
+- network-manager
+
+If missing:
+
+- Requires internet connection
+- Displays clear error messages if unavailable
+
+---
+
+## Input Handling
+
+- Manages gptokeyb lifecycle cleanly
+- Prevents duplicate or stuck instances
+- Restores controls after on-screen keyboard use
+- Maintains stable input across menu loops
+
+---
+
+## Exit Handling
+
+- Restores original console font
+- Kills gptokeyb cleanly
+- Uses trap to ensure cleanup on exit or crash
+
+---
+
+## Configuration
+
+Inside the script:
+
+WIFI_LOG=OFF    # Enable logging (ON/OFF)  
+MONITOR=ON      # Enable auto-reconnect (ON/OFF)
+
+---
+
+## Requirements
+
+- R36S running ArkOS or dArkOS
+- Internet connection (for first run if dependencies missing)
+- Root privileges
+
+---
+
+## Notes
+
+- Designed specifically for R36S hardware
+- Handles unreliable USB Wi-Fi behavior common on these devices
+- Safe to re-run without breaking existing configuration
+
+---
+
+## Credits
+
+- Original Wi-Fi script by Kris Henriksen  
+- Wifi-Toggle v3.6 and Bluetooth Manager contributions by Jason3x  
+- Enhancements and integration by djparent  
+
+---
