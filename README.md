@@ -1,4 +1,4 @@
-# R36S Wi-Fi Manager (ArkOS / dArkOS)
+# R36S Wi-Fi Manager (ArkOS / dArkOS/RE)
 
 v3.5.2 by djparent  
 Based on Wifi script by Kris Henriksen, with additional code from Wifi-Toggle v3.6 and Bluetooth Manager for dArkOS by Jason3x.
