@@ -56,7 +56,6 @@ EOF
 		nmcli general reload 2>/dev/null || true
 	fi
 else
-	[[ -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]] && chmod 777 /etc/NetworkManager/conf.d/wifi-powersave-off.conf
 	rm -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf
 fi
 
