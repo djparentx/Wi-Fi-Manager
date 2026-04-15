@@ -1459,15 +1459,5 @@ if [[ -n "$iface_check" ]]; then
 	iwconfig "$iface_check" power off 2>/dev/null || true
 	[[ "$MONITOR" == "ON" ]] && Start_Connection_Monitor
 fi
-
-# --- Creates a persistent NM config to disable wifi power saving ---
-# --- Remove /etc/NetworkManager/conf.d/wifi-powersave-off.conf to revert ---
-if [ ! -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]; then
-    cat > /etc/NetworkManager/conf.d/wifi-powersave-off.conf << 'EOF'
-[connection]
-wifi.powersave = 2
-EOF
-    nmcli general reload 2>/dev/null || true
-fi
-			
+		
 Main_Menu
