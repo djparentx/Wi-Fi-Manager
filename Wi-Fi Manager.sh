@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =======================================
-# Wi-Fi Manager 3.5.2 for ArkOS and dArkOS
+# Wi-Fi Manager 3.5.3 for ArkOS and dArkOS
 # by djparent
 # inspired by Wifi by Kris Henriksen
 # =======================================
@@ -28,8 +28,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-WIFI_LOG=OFF	# ON for logging
-MONITOR=ON		# ON for connection healing
+MONITOR=ON			# ON for connection healing
+POWERSAVE_OFF=ON	# ON for connection stability (OFF for R36XX)
+WIFI_LOG=OFF		# ON for logging
 
 # -------------------------------------------------------
 # Root privileges check
@@ -40,14 +41,23 @@ fi
 
 # -------------------------------------------------------
 # Creates a persistent NM config to disable wifi power saving
-# Remove /etc/NetworkManager/conf.d/wifi-powersave-off.conf to revert
+# Set POWERSAVE_OFF=OFF to revert
 # -------------------------------------------------------
-if [ ! -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]; then
-    cat > /etc/NetworkManager/conf.d/wifi-powersave-off.conf << 'EOF'
+if grep -q "r36xx" /proc/device-tree/compatible; then
+    POWERSAVE_OFF=OFF
+fi
+
+if [[ "$POWERSAVE_OFF" == "ON" ]]; then
+	if [ ! -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]; then
+		cat > /etc/NetworkManager/conf.d/wifi-powersave-off.conf << 'EOF'
 [connection]
 wifi.powersave = 2
 EOF
-    nmcli general reload 2>/dev/null || true
+		nmcli general reload 2>/dev/null || true
+	fi
+else
+	[[ -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]] && chmod 777 /etc/NetworkManager/conf.d/wifi-powersave-off.conf
+	rm -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf
 fi
 
 # -------------------------------------------------------
