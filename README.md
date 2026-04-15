@@ -87,7 +87,10 @@ Disables NetworkManager Wi-Fi power saving to prevent drops:
 
 To revert:
 
-  sudo rm /etc/NetworkManager/conf.d/wifi-powersave-off.conf
+- sudo rm /etc/NetworkManager/conf.d/wifi-powersave-off.conf
+- or in the script itself disable with:
+
+  POWERSAVE_OFF=OFF
 
 ---
 
