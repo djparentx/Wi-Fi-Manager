@@ -7,7 +7,7 @@ Based on Wifi script by Kris Henriksen, with additional code from Wifi-Toggle v3
 
 ## Overview
 
-An advanced Wi-Fi management tool for the R36S that improves reliability, adds automation, and provides a controller-friendly interface with full system integration.
+An advanced Wi-Fi management tool for the R36S that improves reliability, adds automation, and provides a controller-friendly interface with full system integration. R36XX devices must disable the powersave feature with POWERSAVE_OFF=OFF.
 
 ---
 
@@ -23,7 +23,7 @@ An advanced Wi-Fi management tool for the R36S that improves reliability, adds a
 - Automatic dependency detection and installation
 - Clean UI designed for handheld use
 - Safe startup and exit handling
-- Auto-detection of R36XX consoles, disable power save feature
+- Auto-detection of R36XX consoles  on dArkOS
 
 ---
 
