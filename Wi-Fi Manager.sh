@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =======================================
-# Wi-Fi Manager 3.5.3 for ArkOS and dArkOS
+# Wi-Fi Manager 3.5.4 for ArkOS and dArkOS
 # by djparent
 # inspired by Wifi by Kris Henriksen
 # =======================================
@@ -78,6 +78,7 @@ SYSTEM_LANG=""
 MONITOR_PID=""
 GPTOKEYB_PID=""
 CURR_TTY="/dev/tty1"
+TMP_KEYS="/tmp/keys.gptk.$$"
 WIFI_USB_PATH="/sys/bus/usb/devices/1-1"
 ES_CONF="/home/ark/.emulationstation/es_settings.cfg"
 PREFERRED_WIFI_MODULES=("8188eu" "r8188eu" "rtl8723bu")
@@ -465,11 +466,11 @@ fi
 # -------------------------------------------------------
 Start_GPTKeyb() {
     pkill -9 -f gptokeyb 2>/dev/null || true
-    if [ -n "$GPTOKEYB_PID" ]; then
+    if [ -n "${GPTOKEYB_PID:-}" ]; then
         kill "$GPTOKEYB_PID" 2>/dev/null
     fi
     sleep 0.1
-    /opt/inttools/gptokeyb -1 "$0" -c "/opt/inttools/keys.gptk" > /dev/null 2>&1 &
+	/opt/inttools/gptokeyb -1 "$0" -c "$TMP_KEYS" > /dev/null 2>&1 &
     GPTOKEYB_PID=$!
 }
 
@@ -481,6 +482,10 @@ Stop_GPTKeyb() {
         kill "$GPTOKEYB_PID" 2>/dev/null
         GPTOKEYB_PID=""
     fi
+}
+
+Cleanup() {
+    rm -f "$TMP_KEYS"
 }
 
 # -------------------------------------------------------
@@ -935,7 +940,7 @@ Check_rfkill() {
     done
 
     if [[ ${#MISSING_PACKAGES[@]} -gt 0 ]]; then
-    if ! ping -c 1 -W 3 8.8.8.8 &>/dev/null; then
+		if ! ping -c 1 -W 3 8.8.8.8 &>/dev/null; then
             dialog --backtitle "$T_BACKTITLE2 $cur_ap" --title "$T_INTERNET" --msgbox "\n $T_ACTIVE\n\n $T_PLEASE_CHECK" 9 60 > "$CURR_TTY"
             Exit_Menu
         fi
@@ -1430,6 +1435,11 @@ Main_Menu() {
 # -------------------------------------------------------
 export SDL_GAMECONTROLLERCONFIG_FILE="/opt/inttools/gamecontrollerdb.txt"
 sudo chmod 666 /dev/uinput
+cp /opt/inttools/keys.gptk "$TMP_KEYS"
+if grep -q '^b = backspace' "$TMP_KEYS"; then
+    sed -i 's/^b = .*/b = esc/' "$TMP_KEYS"
+    sed -i 's/^a = .*/a = enter/' "$TMP_KEYS"
+fi
 Start_GPTKeyb
 
 # -------------------------------------------------------
@@ -1446,7 +1456,7 @@ fi
 # ---------------------------------------------------------
 printf "\033[H\033[2J" > "$CURR_TTY"
 dialog --clear
-trap Exit_Menu EXIT
+trap 'Stop_GPTKeyb; Cleanup' Exit_Menu EXIT
 
 [[ "$MONITOR" != "ON" ]] && Stop_Connection_Monitor
 Update_Preferred_Modules
