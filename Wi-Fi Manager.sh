@@ -1456,7 +1456,7 @@ fi
 # ---------------------------------------------------------
 printf "\033[H\033[2J" > "$CURR_TTY"
 dialog --clear
-trap 'Stop_GPTKeyb; Cleanup' Exit_Menu EXIT
+trap 'Stop_GPTKeyb; Cleanup; Exit_Menu' EXIT
 
 [[ "$MONITOR" != "ON" ]] && Stop_Connection_Monitor
 Update_Preferred_Modules
