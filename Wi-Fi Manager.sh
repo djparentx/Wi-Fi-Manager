@@ -1434,7 +1434,7 @@ Main_Menu() {
 # Gamepad Setup
 # -------------------------------------------------------
 export SDL_GAMECONTROLLERCONFIG_FILE="/opt/inttools/gamecontrollerdb.txt"
-sudo chmod 666 /dev/uinput
+chmod 666 /dev/uinput
 cp /opt/inttools/keys.gptk "$TMP_KEYS"
 if grep -q '^b = backspace' "$TMP_KEYS"; then
     sed -i 's/^b = .*/b = esc/' "$TMP_KEYS"
