@@ -14,7 +14,7 @@ An advanced Wi-Fi management tool for the R36S that improves reliability, adds a
 
 ## Features
 
-- Driver check, will receive an error msg if drivers missing
+- Driver check, will install RTL8188EUS WiFi driver if missing
 - B button now functions as back button
 - Multi-language support (EN, FR, ES, PT, IT, DE, PL)
 - Full Wi-Fi control (enable / disable)
