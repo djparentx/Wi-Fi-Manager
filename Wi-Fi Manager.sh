@@ -141,6 +141,8 @@ T_NO_SAVED="No saved networks."
 T_ENABLE="Enable"
 T_DISABLE="Disable"
 T_EXIT="Exit"
+T_DRIVER_TITLE="[ Drivers Missing ]"
+T_DRIVER_MSG="WiFi drivers missing.\n\nPlease install supported drivers before using WiFi Manager."
 
 # --- FRANCAIS (FR) ---
 if [[ "$SYSTEM_LANG" == *"fr"* ]]; then
@@ -1468,6 +1470,16 @@ iface_check=$(ip link show | awk '/wlan[0-9]+:/ {gsub(":", ""); print $2; exit}'
 if [[ -n "$iface_check" ]]; then
 	iwconfig "$iface_check" power off 2>/dev/null || true
 	[[ "$MONITOR" == "ON" ]] && Start_Connection_Monitor
+fi
+
+if ! { { modinfo r8188eu &>/dev/null && [[ -f /lib/firmware/rtlwifi/rtl8188eufw.bin ]]; } || \
+	   { modinfo mt7601u &>/dev/null && { [[ -f /lib/firmware/mt7601u.bin ]] || [[ -f /lib/firmware/mediatek/mt7601u.bin ]]; }; }; }; then
+
+	dialog --backtitle "$T_BACKTITLE" \
+		   --title "$T_DRIVER_TITLE" \
+		   --msgbox "$T_DRIVER_MSG" 8 50 > "$CURR_TTY"
+
+	Exit_Menu
 fi
 		
 Main_Menu
