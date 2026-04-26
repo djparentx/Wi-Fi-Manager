@@ -14,8 +14,11 @@ An advanced Wi-Fi management tool for the R36S that improves reliability, adds a
 
 ## Features
 
-- Driver check, will install RTL8188EUS WiFi driver if missing
-- B button now functions as back button
+- B button functions as back button
+- Checks for installed drivers on launch
+- Will install missing drivers, no connection needed:
+    - RTL8188eufw
+    - MT7601u
 - Multi-language support (EN, FR, ES, PT, IT, DE, PL)
 - Full Wi-Fi control (enable / disable)
 - USB OTG Wi-Fi adapter support with automatic handling
@@ -32,6 +35,7 @@ An advanced Wi-Fi management tool for the R36S that improves reliability, adds a
 
 ## What’s New vs Original
 
+- Automatic detenction and install of missing drivers
 - Automatic language detection from EmulationStation
 - Full USB Wi-Fi lifecycle management (load, unload, re-enumerate)
 - Persistent systemd service for USB Wi-Fi initialization
