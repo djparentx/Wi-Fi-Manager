@@ -180,7 +180,7 @@ If missing:
 Inside the script:
 
 POWERSAVE_OFF=ON   # Enable connection stability
-WIFI_LOG=ON       # Enable logging (ON/OFF)  
+WIFI_LOG=ON        # Enable logging (ON/OFF)
 MONITOR=ON         # Enable auto-reconnect (ON/OFF)
 
 ---
