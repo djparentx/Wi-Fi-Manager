@@ -30,7 +30,6 @@
 
 MONITOR=ON			# ON for connection healing
 POWERSAVE_OFF=ON	# ON for connection stability
-WIFI_LOG=OFF		# ON for logging
 
 # -------------------------------------------------------
 # Root privileges check
@@ -43,10 +42,6 @@ fi
 # Creates a persistent NM config to disable wifi power saving
 # Set POWERSAVE_OFF=OFF to revert
 # -------------------------------------------------------
-if grep -q "r36xx" /proc/device-tree/compatible; then
-    POWERSAVE_OFF=OFF
-fi
-
 if [[ "$POWERSAVE_OFF" == "ON" ]]; then
 	if [ ! -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]; then
 		cat > /etc/NetworkManager/conf.d/wifi-powersave-off.conf << 'EOF'
@@ -73,6 +68,7 @@ fi
 # -------------------------------------------------------
 # Variables
 # -------------------------------------------------------
+WIFI_LOG=OFF
 old_ifs="$IFS"
 SYSTEM_LANG=""
 MONITOR_PID=""
