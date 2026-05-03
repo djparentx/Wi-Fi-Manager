@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =======================================
-# Wi-Fi Manager 4.0 for ArkOS and dArkOS
+# Wi-Fi Manager 4.1 for ArkOS and dArkOS
 # by djparent
 # inspired by Wifi by Kris Henriksen
 # =======================================
@@ -83,7 +83,6 @@ if [ -f "$ES_CONF" ]; then
     ES_DETECTED=$(grep "name=\"Language\"" "$ES_CONF" | grep -o 'value="[^"]*"' | cut -d '"' -f 2)
     [ -n "$ES_DETECTED" ] && SYSTEM_LANG="$ES_DETECTED"
 fi
-
 # -------------------------------------------------------
 # Default configuration : EN
 # -------------------------------------------------------
@@ -506,10 +505,6 @@ Stop_GPTKeyb() {
         kill "$GPTOKEYB_PID" 2>/dev/null
         GPTOKEYB_PID=""
     fi
-}
-
-Cleanup() {
-    rm -f "$TMP_KEYS"
 }
 
 # -------------------------------------------------------
@@ -988,6 +983,7 @@ Exit_Menu() {
     printf "\033[H\033[2J" > "$CURR_TTY"
     printf "\e[?25h" > "$CURR_TTY"
 	Stop_GPTKeyb
+    rm -f "$TMP_KEYS"
     if [[ ! -e "/dev/input/by-path/platform-odroidgo2-joypad-event-joystick" ]]; then
         [ -n "$ORIGINAL_FONT" ] && setfont "$ORIGINAL_FONT"
     fi
@@ -1265,7 +1261,7 @@ Network_Info() {
 		--clear \
 		--no-collapse \
 		--ok-label "$T_BACK" \
-		--msgbox "\n  SSID: $cur_ap\n  IP: $currentip\n  Gateway: $gateway\n  DNS1: $currentdns1\n  DNS2: $currentdns2" 11 36 2>&1 > "$CURR_TTY"
+		--msgbox "\n  SSID:     $cur_ap\n  IP:       $currentip\n  Gateway:  $gateway\n  DNS1:     $currentdns1\n  DNS2:     $currentdns2" 11 40 2>&1 > "$CURR_TTY"
 	if [[ $? != 0 ]]; then
 		Main_Menu
 		return
@@ -1508,7 +1504,7 @@ fi
 # ---------------------------------------------------------
 printf "\033[H\033[2J" > "$CURR_TTY"
 dialog --clear
-trap 'Stop_GPTKeyb; Cleanup; Exit_Menu' EXIT
+trap Exit_Menu EXIT
 
 [[ "$MONITOR" != "ON" ]] && Stop_Connection_Monitor
 Update_Preferred_Modules
