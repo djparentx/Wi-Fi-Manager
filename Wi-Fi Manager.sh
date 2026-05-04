@@ -1261,7 +1261,7 @@ Network_Info() {
 		--clear \
 		--no-collapse \
 		--ok-label "$T_BACK" \
-		--msgbox "\n  SSID:     $cur_ap\n  IP:       $currentip\n  Gateway:  $gateway\n  DNS1:     $currentdns1\n  DNS2:     $currentdns2" 11 40 2>&1 > "$CURR_TTY"
+		--msgbox "\n     SSID:     $cur_ap\n     IP:       $currentip\n     Gateway:  $gateway\n     DNS1:     $currentdns1\n     DNS2:     $currentdns2" 11 40 2>&1 > "$CURR_TTY"
 	if [[ $? != 0 ]]; then
 		Main_Menu
 		return
