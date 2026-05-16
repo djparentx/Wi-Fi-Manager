@@ -1526,7 +1526,7 @@ Toggle_Remote() {
 # Turn Wifi on or off, keep track with state file
 # -------------------------------------------------------
 Toggle_Wifi() {
-	local state="UNKNOWN"
+	local state
 
 	# --- use state file if available, otherwise fall back to detection ---
 	if [ -f /tmp/wifi_manager_state ]; then
@@ -1554,8 +1554,10 @@ Main_Menu() {
 	Check_Remote_Status
 	
     while true; do
-		local WIFI_SHORT
-		local CUR_AP
+		local wifi_short
+		local cur_ap
+		local toggle_label
+		local toggle_remote
 		
 		# --- keep gptokeyb alive ---
 		if [[ -z $(pgrep -f gptokeyb) ]]; then
@@ -1564,35 +1566,35 @@ Main_Menu() {
 		
 		# --- refresh wifi state ---
 		if [ -f /tmp/wifi_manager_state ]; then
-            WIFI_SHORT=$(cat /tmp/wifi_manager_state)
+            wifi_short=$(cat /tmp/wifi_manager_state)
         elif echo "$(Get_Wifi_Status)" | grep -qi "ON"; then
-            WIFI_SHORT="ON"
+            wifi_short="ON"
         else
-            WIFI_SHORT="OFF"
+            wifi_short="OFF"
         fi
         	
-		if [ "$WIFI_SHORT" = "ON" ]; then
+		if [ "$wifi_short" = "ON" ]; then
 			Get_Current_AP
-			CUR_AP="\Z4$cur_ap\Zn"
+			cur_ap="\Z4$cur_ap\Zn"
 			if [ "${REMOTE_ACTIVE:-0}" -eq 1 ]; then
-				WIFI_SHORT="\Z2$T_ON, $T_SHARING\Zn"
+				wifi_short="\Z2$T_ON, $T_SHARING\Zn"
 			else
-				WIFI_SHORT="\Z2$T_ON\Zn"
+				wifi_short="\Z2$T_ON\Zn"
 			fi
-			TOGGLE_LABEL="$T_DISABLE Wi-Fi"
+			toggle_label="$T_DISABLE Wi-Fi"
 		else
-			CUR_AP="$T_NONE"
-			WIFI_SHORT="\Z1$T_OFF\Zn"
-			TOGGLE_LABEL="$T_ENABLE Wi-Fi"
+			cur_ap="$T_NONE"
+			wifi_short="\Z1$T_OFF\Zn"
+			toggle_label="$T_ENABLE Wi-Fi"
 		fi
 		
 		if [ "${REMOTE_ACTIVE:-0}" -eq 1 ]; then
-			TOGGLE_REMOTE="$T_DISABLE $T_REMOTE"
+			toggle_remote="$T_DISABLE $T_REMOTE"
 		else
-			TOGGLE_REMOTE="$T_ENABLE $T_REMOTE"
+			toggle_remote="$T_ENABLE $T_REMOTE"
 		fi
 
-		mainoptions=( 1 "$TOGGLE_LABEL" 2 "$T_ADD_NEW" 3 "$T_SAVED_TITLE" 4 "$T_FORGET" 5 "$TOGGLE_REMOTE" 6 "$T_INFO" )
+		mainoptions=( 1 "$toggle_label" 2 "$T_ADD_NEW" 3 "$T_SAVED_TITLE" 4 "$T_FORGET" 5 "$toggle_remote" 6 "$T_INFO" )
 
 		mainselection=(dialog \
 			--colors \
@@ -1601,7 +1603,7 @@ Main_Menu() {
 			--no-collapse \
 			--clear \
 			--cancel-label "$T_EXIT" \
-			--menu "Wi-Fi $T_STATUS: $WIFI_SHORT\n$T_CONN_TO: $CUR_AP" \
+			--menu "Wi-Fi $T_STATUS: $wifi_short\n$T_CONN_TO: $cur_ap" \
 			14 45 6)
 
 		mainchoices=$("${mainselection[@]}" "${mainoptions[@]}" 2>&1 > "$CURR_TTY")
