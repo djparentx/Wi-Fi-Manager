@@ -119,7 +119,7 @@ T_BACKTITLE="Wi-Fi Manager by djparent"
 T_CONN_TO="Connected to"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Please wait ..."
-T_STARTING="Starting Wi-Fi Manager ...\n$T_WAIT"
+T_STARTING="Starting Wi-Fi Manager. $T_WAIT"
 T_ON="ON"
 T_OFF="OFF"
 T_ERR_TITLE="Error"
@@ -177,7 +177,7 @@ T_BACKTITLE="Wi-Fi Manager par djparent"
 T_CONN_TO="Connecte a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Veuillez patienter ..."
-T_STARTING="Demarrage de Wi-Fi Manager ...\n$T_WAIT"
+T_STARTING="Demarrage de Wi-Fi Manager. $T_WAIT"
 T_ON="ACTIVE"
 T_OFF="DESACTIVE"
 T_ERR_TITLE="Erreur"
@@ -235,7 +235,7 @@ T_BACKTITLE="Wi-Fi Manager por djparent"
 T_CONN_TO="Conectado a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Por favor espere ..."
-T_STARTING="Iniciando Wi-Fi Manager ...\n$T_WAIT"
+T_STARTING="Iniciando Wi-Fi Manager. $T_WAIT"
 T_ON="ACTIVADO"
 T_OFF="DESACTIVADO"
 T_ERR_TITLE="Error"
@@ -293,7 +293,7 @@ T_BACKTITLE="Wi-Fi Manager por djparent"
 T_CONN_TO="Conectado a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Por favor aguarde ..."
-T_STARTING="Iniciando Wi-Fi Manager ...\n$T_WAIT"
+T_STARTING="Iniciando Wi-Fi Manager. $T_WAIT"
 T_ON="ATIVADO"
 T_OFF="DESATIVADO"
 T_ERR_TITLE="Erro"
@@ -351,7 +351,7 @@ T_BACKTITLE="Wi-Fi Manager di djparent"
 T_CONN_TO="Connesso a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Attendere prego ..."
-T_STARTING="Avvio di Wi-Fi Manager ...\n$T_WAIT"
+T_STARTING="Avvio di Wi-Fi Manager. $T_WAIT"
 T_ON="ATTIVO"
 T_OFF="DISATTIVO"
 T_ERR_TITLE="Errore"
@@ -409,7 +409,7 @@ T_BACKTITLE="Wi-Fi Manager von djparent"
 T_CONN_TO="Verbunden mit"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Bitte warten ..."
-T_STARTING="Wi-Fi Manager wird gestartet ...\n$T_WAIT"
+T_STARTING="Wi-Fi Manager wird gestartet. $T_WAIT"
 T_ON="AKTIV"
 T_OFF="INAKTIV"
 T_ERR_TITLE="Fehler"
@@ -467,7 +467,7 @@ T_BACKTITLE="Wi-Fi Manager przez djparent"
 T_CONN_TO="Polaczono z"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Prosze czekac ..."
-T_STARTING="Uruchamianie Wi-Fi Manager ...\n$T_WAIT"
+T_STARTING="Uruchamianie Wi-Fi Manager. $T_WAIT"
 T_ON="WLACZONY"
 T_OFF="WYLACZONY"
 T_ERR_TITLE="Blad"
@@ -999,6 +999,17 @@ Stop_Connection_Monitor() {
 # Turn on Wifi
 # -------------------------------------------------------
 Enable_Wifi() {
+    dialog \
+		--backtitle "$T_BACKTITLE2 $cur_ap" \
+		--title "$T_STATUS" \
+		--infobox "\n  $T_WIFI_ENABLED\n\n  $T_PLEASE_WAIT" \
+		7 40 > "$CURR_TTY"
+		
+	if [[ -f /tmp/wifi_disable_start ]]; then
+		local elapsed=$(( $(date +%s) - $(cat /tmp/wifi_disable_start) ))
+		[[ $elapsed -lt 2 ]] && sleep 2
+	fi
+
 	(
 		OTG 2>/dev/null || true
 		Enable_Wifi_Core
@@ -1016,12 +1027,6 @@ Enable_Wifi() {
 			(( timeout-- ))
 		done
 	) &
-
-    dialog \
-		--backtitle "$T_BACKTITLE2 $cur_ap" \
-		--title "$T_STATUS" \
-		--infobox "\n  $T_WIFI_ENABLED\n\n  $T_PLEASE_WAIT" \
-		7 40 > "$CURR_TTY"
 
     echo "ON" > /tmp/wifi_manager_state
 	
@@ -1046,22 +1051,17 @@ Enable_Wifi() {
 	done
 	
 	[[ "$MONITOR" == "ON" ]] && Start_Connection_Monitor
-
 }
 
 # -------------------------------------------------------
 # Turn off Wifi
 # -------------------------------------------------------
 Disable_Wifi() {
-	# dialog \
-		# --backtitle "$T_BACKTITLE2 $cur_ap" \
-		# --title "$T_STATUS" 
-		# --infobox "\n  $T_DISABLE_WIFI" 
-		# 5 40 > "$CURR_TTY"
-		
 	[[ "$MONITOR" == "ON" ]] && Stop_Connection_Monitor
 	
+	rm -f /tmp/wifi_disable_start
 	(
+		echo "$(date +%s)" > /tmp/wifi_disable_start
 		rfkill block wifi
 		if command -v nmcli &>/dev/null; then
 			nmcli radio wifi off
@@ -1071,6 +1071,7 @@ Disable_Wifi() {
 		Eject_Wifi
 		OTG 2>/dev/null
 		rfkill block wifi 2>/dev/null || true
+		
     ) &
 	
     echo "OFF" > /tmp/wifi_manager_state
@@ -1467,7 +1468,6 @@ Network_Info() {
     DNS2:       $currentdns2" \
 		14 40 2>&1 > "$CURR_TTY"
 	if [[ $? != 0 ]]; then
-		Main_Menu
 		return
 	fi
 }
@@ -1594,8 +1594,16 @@ Main_Menu() {
 			toggle_remote="$T_ENABLE $T_REMOTE"
 		fi
 
-		mainoptions=( 1 "$toggle_label" 2 "$T_ADD_NEW" 3 "$T_SAVED_TITLE" 4 "$T_FORGET" 5 "$toggle_remote" 6 "$T_INFO" )
+		local mainoptions
+		mainoptions=( \
+			1 "$toggle_label" \
+			2 "$T_ADD_NEW" \
+			3 "$T_SAVED_TITLE" \
+			4 "$T_FORGET" \
+			5 "$toggle_remote" \
+			6 "$T_INFO" )
 
+		local mainselection
 		mainselection=(dialog \
 			--colors \
 			--backtitle "$T_BACKTITLE" \
@@ -1604,8 +1612,9 @@ Main_Menu() {
 			--clear \
 			--cancel-label "$T_EXIT" \
 			--menu "Wi-Fi $T_STATUS: $wifi_short\n$T_CONN_TO: $cur_ap" \
-			14 45 6)
+			14 45 6 )
 
+		local mainchoices
 		mainchoices=$("${mainselection[@]}" "${mainoptions[@]}" 2>&1 > "$CURR_TTY")
 			if [[ $? != 0 || -z "$mainchoices" ]]; then
 				Exit_Menu
