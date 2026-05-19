@@ -1,4 +1,5 @@
 #!/bin/bash
+VERSION="4.2"
 
 # =======================================================
 # 		 Wi-Fi Manager 4.2 for ArkOS and dArkOS
@@ -115,11 +116,11 @@ fi
 # -------------------------------------------------------
 # Default configuration : EN
 # -------------------------------------------------------
-T_BACKTITLE="Wi-Fi Manager by djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} by djparent"
 T_CONN_TO="Connected to"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Please wait ..."
-T_STARTING="Starting Wi-Fi Manager. $T_WAIT"
+T_STARTING="Starting Wi-Fi Manager. \n$T_WAIT"
 T_ON="ON"
 T_OFF="OFF"
 T_ERR_TITLE="Error"
@@ -170,14 +171,16 @@ T_DRIVER_MSG="WiFi drivers missing.\n\nInstall RTL8188EUS WiFi driver?"
 T_DRIVER_INST="[ DRIVERS INSTALLED ]"
 T_DRIVER_SUCC="RTL8188EUS WiFi driver installed successfully."
 T_MONITOR_MSG="Wifi was disabled by connection monitor."
+T_UPDATE_AVAILABLE="Update Available"
+T_DOWNLOAD="Download Update Now?"
 
 # --- FRANCAIS (FR) ---
 if [[ "$SYSTEM_LANG" == *"fr"* ]]; then
-T_BACKTITLE="Wi-Fi Manager par djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} par djparent"
 T_CONN_TO="Connecte a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Veuillez patienter ..."
-T_STARTING="Demarrage de Wi-Fi Manager. $T_WAIT"
+T_STARTING="Demarrage de Wi-Fi Manager. \n$T_WAIT"
 T_ON="ACTIVE"
 T_OFF="DESACTIVE"
 T_ERR_TITLE="Erreur"
@@ -228,14 +231,16 @@ T_DRIVER_MSG="Pilotes WiFi manquants.\n\nInstaller le pilote WiFi RTL8188EUS ?"
 T_DRIVER_INST="[ PILOTES INSTALLES ]"
 T_DRIVER_SUCC="Pilote WiFi RTL8188EUS installe avec succes."
 T_MONITOR_MSG="Le Wifi a ete desactive par le moniteur de connexion."
+T_UPDATE_AVAILABLE="Mise a jour disponible"
+T_DOWNLOAD="Telecharger la mise a jour maintenant ?"
 
 # --- ESPANOL (ES) ---
 elif [[ "$SYSTEM_LANG" == *"es"* ]]; then
-T_BACKTITLE="Wi-Fi Manager por djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} por djparent"
 T_CONN_TO="Conectado a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Por favor espere ..."
-T_STARTING="Iniciando Wi-Fi Manager. $T_WAIT"
+T_STARTING="Iniciando Wi-Fi Manager. \n$T_WAIT"
 T_ON="ACTIVADO"
 T_OFF="DESACTIVADO"
 T_ERR_TITLE="Error"
@@ -286,14 +291,16 @@ T_DRIVER_MSG="Faltan controladores WiFi.\n\nInstalar el controlador WiFi RTL8188
 T_DRIVER_INST="[ CONTROLADORES INSTALADOS ]"
 T_DRIVER_SUCC="Controlador WiFi RTL8188EUS instalado correctamente."
 T_MONITOR_MSG="El Wifi fue desactivado por el monitor de conexion."
+T_UPDATE_AVAILABLE="Actualizacion disponible"
+T_DOWNLOAD="Descargar actualizacion ahora?"
 
 # --- PORTUGUES (PT) ---
 elif [[ "$SYSTEM_LANG" == *"pt"* ]]; then
-T_BACKTITLE="Wi-Fi Manager por djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} por djparent"
 T_CONN_TO="Conectado a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Por favor aguarde ..."
-T_STARTING="Iniciando Wi-Fi Manager. $T_WAIT"
+T_STARTING="Iniciando Wi-Fi Manager. \n$T_WAIT"
 T_ON="ATIVADO"
 T_OFF="DESATIVADO"
 T_ERR_TITLE="Erro"
@@ -344,14 +351,16 @@ T_DRIVER_MSG="Drivers WiFi em falta.\n\nInstalar o driver WiFi RTL8188EUS?"
 T_DRIVER_INST="[ DRIVERS INSTALADOS ]"
 T_DRIVER_SUCC="Driver WiFi RTL8188EUS instalado com sucesso."
 T_MONITOR_MSG="O Wifi foi desativado pelo monitor de conexao."
+T_UPDATE_AVAILABLE="Atualizacao disponivel"
+T_DOWNLOAD="Baixar atualizacao agora?"
 
 # --- ITALIANO (IT) ---
 elif [[ "$SYSTEM_LANG" == *"it"* ]]; then
-T_BACKTITLE="Wi-Fi Manager di djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} di djparent"
 T_CONN_TO="Connesso a"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Attendere prego ..."
-T_STARTING="Avvio di Wi-Fi Manager. $T_WAIT"
+T_STARTING="Avvio di Wi-Fi Manager. \n$T_WAIT"
 T_ON="ATTIVO"
 T_OFF="DISATTIVO"
 T_ERR_TITLE="Errore"
@@ -402,14 +411,16 @@ T_DRIVER_MSG="Driver WiFi mancanti.\n\nInstallare il driver WiFi RTL8188EUS?"
 T_DRIVER_INST="[ DRIVER INSTALLATI ]"
 T_DRIVER_SUCC="Driver WiFi RTL8188EUS installato con successo."
 T_MONITOR_MSG="Il Wifi e stato disattivato dal monitor di connessione."
+T_UPDATE_AVAILABLE="Aggiornamento disponibile"
+T_DOWNLOAD="Scaricare aggiornamento ora?"
 
 # --- DEUTSCH (DE) ---
 elif [[ "$SYSTEM_LANG" == *"de"* ]]; then
-T_BACKTITLE="Wi-Fi Manager von djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} von djparent"
 T_CONN_TO="Verbunden mit"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Bitte warten ..."
-T_STARTING="Wi-Fi Manager wird gestartet. $T_WAIT"
+T_STARTING="Wi-Fi Manager wird gestartet. \n$T_WAIT"
 T_ON="AKTIV"
 T_OFF="INAKTIV"
 T_ERR_TITLE="Fehler"
@@ -460,14 +471,16 @@ T_DRIVER_MSG="WiFi Treiber fehlen.\n\nRTL8188EUS WiFi Treiber installieren?"
 T_DRIVER_INST="[ TREIBER INSTALLIERT ]"
 T_DRIVER_SUCC="RTL8188EUS WiFi Treiber erfolgreich installiert."
 T_MONITOR_MSG="Wifi wurde vom Verbindungsmonitor deaktiviert."
+T_UPDATE_AVAILABLE="Update verfuegbar"
+T_DOWNLOAD="Update jetzt herunterladen?"
 
 # --- POLSKI (PL) ---
 elif [[ "$SYSTEM_LANG" == *"pl"* ]]; then
-T_BACKTITLE="Wi-Fi Manager przez djparent"
+T_BACKTITLE="Wi-Fi Manager ${VERSION} przez djparent"
 T_CONN_TO="Polaczono z"
 T_BACKTITLE2="Wi-Fi Manager: $T_CONN_TO"
 T_WAIT="Prosze czekac ..."
-T_STARTING="Uruchamianie Wi-Fi Manager. $T_WAIT"
+T_STARTING="Uruchamianie Wi-Fi Manager. \n$T_WAIT"
 T_ON="WLACZONY"
 T_OFF="WYLACZONY"
 T_ERR_TITLE="Blad"
@@ -518,7 +531,38 @@ T_DRIVER_MSG="Brakuja sterowniki WiFi.\n\nZainstalowac sterownik WiFi RTL8188EUS
 T_DRIVER_INST="[ STEROWNIKI ZAINSTALOWANE ]"
 T_DRIVER_SUCC="Sterownik WiFi RTL8188EUS zainstalowany pomyslnie."
 T_MONITOR_MSG="Wifi zostalo wylaczone przez monitor polaczenia."
+T_UPDATE_AVAILABLE="Dostepna aktualizacja"
+T_DOWNLOAD="Pobrac aktualizacje teraz?"
 fi
+
+# -------------------------------------------------------
+# Check for Updates
+# -------------------------------------------------------
+Self_Update() {
+    local repo="djparentx/Wi-Fi-Manager"
+    local latest url
+
+    read -r latest url < <(curl -s https://api.github.com/repos/${repo}/releases/latest \
+    | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['tag_name'].lstrip('v'), d['assets'][0]['browser_download_url'])")
+
+    [[ -z "$latest" ]] && return  # no internet / API fail, skip silently
+
+    if [[ "$latest" != "$VERSION" ]]; then
+		dialog \
+			--clear \
+			--backtitle "$T_BACKTITLE" \
+			--title "$latest $T_UPDATE_AVAILABLE" \
+			--yesno "\n  $T_DOWNLOAD" \
+			7 45 > "$CURR_TTY" 2>&1
+			
+		if [[ $? != 0 ]]; then
+			return
+		fi
+
+        curl -L "$url" -o "$0" && chmod +x "$0"
+        exec "$0"  # relaunch updated script
+    fi
+}
 
 # -------------------------------------------------------
 # Start gamepad input
@@ -1256,7 +1300,7 @@ Remove_Network() {
     dialog \
         --clear \
         --backtitle "$T_BACKTITLE2 $cur_ap" \
-        --title "$T_FORGET" --clear \
+        --title "$T_FORGET" \
         --yesno "\n $T_REMOVE $1?" \
 		6 45 > "$CURR_TTY" 2>&1
     
@@ -1699,6 +1743,7 @@ printf "\033[H\033[2J" > "$CURR_TTY"
 dialog --clear
 trap Exit_Menu EXIT
 
+Self_Update
 Update_Preferred_Modules
 Check_rfkill
 Check_Remote_Status
