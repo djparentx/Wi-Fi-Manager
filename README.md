@@ -14,6 +14,7 @@ An advanced Wi-Fi management tool for the R36S that improves reliability, adds a
 
 ## Features
 
+- Self-updates to latest GithHub release
 - B button functions as back button
 - Checks for installed drivers on launch
 - Will install missing drivers, no connection needed:
