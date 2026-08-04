@@ -1,3 +1,5 @@
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O8Z424G15Y)
+
 # R36S Wi-Fi Manager (ArkOS / dArkOS/RE)
 
 v4.2 by djparent
